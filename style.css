@@ -1,0 +1,459 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue&family=Libertinus+Math&display=swap');
+:root{
+    --primary: #0d6efd;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --warning: #ffc107;
+    --info: #0dcaf0;
+    --surface: #ffffff;
+    --muted: #f1f5f9;
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    --radius-xxl: 1.25rem;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+
+
+body{
+    font-family: "Comic Neue", cursive;
+    font-weight: 400;
+    background: linear-gradient(135deg, #ffffff, #e6f0fa)
+}
+
+/* It means:
+Inset
+top: 0;
+right: 0;
+bottom: 0;
+left: 0;
+ 
+So the background is stretched to cover the entire screen. */
+ 
+/* pointer events --"Don't let this background interfere with mouse clicks." */
+
+/*
+inset: -20%;
+ 
+makes the element larger than its container.
+Because negative values push the edges outward.
+       EXTRA AREA
+   ┌───────────────────┐
+   │ ┌───────────────┐ │
+   │ │    SCREEN     │ │
+   │ └───────────────┘ │
+   └───────────────────┘
+ 
+This gives the moving grid some extra space. */
+ 
+/*circle at 1px 1px -- 1px from left 1px from top  */
+/* 1px, transparent 2px
+1px → visible
+2px → becomes transparent */
+ 
+ 
+/* /26px 26px
+ 
+controls the background size.
+ 
+It tells the browser to repeat the pattern every:
+ 
+26px horizontally
+26px vertically
+ 
+So instead of one dot:
+ 
+•
+ 
+we get:
+ 
+•     •     •     •
+     
+•     •     •     •
+     
+•     •     •     •
+ 
+That's our grid. */
+.science-bg{
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.science-bg .grid{
+    position: absolute;
+    inset: -20%;
+    background: radial-gradient(circle at 1px 1px, rgba(13,110,253,.18) 1px, transparent 2px) 0 0/26px 26px, radial-gradient(circle at 1px 1px, rgba(25,135,84,.14) 1px, transparent 2px) 13px 13px/26px 26px;
+    filter: blur(.2px);
+    animation: gridDrift 40s linear infinite;
+}
+
+/* translate3d()
+translate3d(-120px, -80px, 0)
+ 
+This moves an element in three directions:
+ 
+X → left/right
+Y → up/down
+Z → forward/backward
+ 
+So:
+ 
+-120px → X direction
+-80px  → Y direction
+0      → Z direction
+ 
+Therefore, the grid moves:
+ 
+120px to the left
+80px upward
+0px forward/backward
+ 
+That's why the background appears to drift. */
+ 
+@keyframes gridDrift{
+    0%{
+        transform: translate3d(0, 0, 0);
+    }
+    100%{
+        transform: translate3d(-120px, -80px, 0);
+    }
+}
+
+/* "closest-side tells the gradient how far its glow should spread inside the element." */
+/* This creates a glowing effect.
+ 
+The center is more visible:
+and it gradually fades away. */
+
+.science-bg .orb{
+    position: absolute;
+    width: 420px;
+    height: 420px;
+    background: radial-gradient(closest-side, rgba(13,110,253,.20), rgba(13,110,253,0));
+    border-radius: 50%;
+    filter: blur(6px);
+}
+
+/* top: -8%
+ 
+ 
+This moves the orb upward.Because it is negative, part of the orb goes outside the screen.
+So you might see:
+     🔵
+┌─────────────────────┐
+│                     │
+│                     │
+│                     │
+└─────────────────────┘
+ 
+Only part of the orb is visible.
+ 
+left: -6%;
+ 
+This moves the orb towards the left.
+ 
+Again, because it is negative, part of it can go outside the screen.
+ 
+So Orb 1 appears in the top-left corner.*/
+ 
+.science-bg .orb.o1{
+    top: -8%;
+    left: -6%;
+    animation: float1 22s ease-in-out infinite alternate;
+}
+
+.science-bg .orb.o2{
+    bottom: -10%;
+    right: -6%;
+    background: radial-gradient(closest-side, rgba(13,202,240,.18), rgba(13,202,240,0));
+    animation: float2 26s ease-in-out infinite alternate;
+}
+
+/* top: 20%;
+This places it about 20% down from the top of its containing area.
+right: 15%;
+This places it about 15% away from the right side.
+ 
+So Orb 3 appears around the upper-right/middle-right region. */
+
+.science-bg .orb.o3{
+    top: 20%;
+    right: 15%;
+    width: 520px;
+    height: 520px;
+    background: radial-gradient(closest-side, rgba(255,193,7,.16), rgba(255,193,7,0));
+    animation: float3 30s ease-in-out infinite alternate;
+}
+
+/* 20px right
+40px upward
+keeps floating back and forth */
+
+@keyframes float1{
+    to{
+        transform: translate3d(40px, 30px, 0);
+    }
+}
+/* Move 60px to the left and 20px up. */
+@keyframes float2{
+    to{
+        transform: translate3d(-60px, -20px, 0);
+    }
+}
+/* Move 20px to the right and 40px up. */
+@keyframes float3{
+    to{
+        transform: translate3d(20px, -40px, 0);
+    }
+}
+
+.dna{
+    position: fixed;
+    left: 50%;
+    /* Moves the element 50 percent from the left */
+    top: 50%;
+    /* Moves the element 50 percent from the top */
+    width: min(900px, 92vw);
+    height: 100vh;
+    /* moves element left by 50 percent of its width and up 50 percent of its height */
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    /* advanced visual affect : Blends this element with the background */
+    mix-blend-mode: overlay;
+    opacity: 0.45;
+    /* enables 3D effect: Adds depth and Makes animals feel 3d insteaad of flat */
+    /* Small value = strong 3d */
+    /* large value = subtle 3d */
+    perspective: 1000px;
+}
+
+/* main vertical container inside .dna */
+.dna .strand{
+    /* Places .strtand inside .dna freely */
+    position: absolute;
+    /* top 8vh; right: 0; bottom: 8vh; left: 0; */
+    inset: 8vh 0 8vh 0; /* Help */
+    /* normally: child elements become 2d
+    with this: children keep their 3d position */
+    transform-style: preserve-3d;
+}
+
+/* DNA = many horizontal lines stacked vertically */
+/* each <span> is: One horizontal step (rung) of the DNA ladder */
+
+.dna .strand span{
+    position: absolute;
+    /* moves span: To the center horizontally but, this puts left edge at center, not full center */
+    left: 50%;
+    /* fixes centering : moves the element back by half its width */
+    transform: translateX(-50%); /* Help */
+    /*  Distance between left and right balls : wifth of DNA */
+    width: 320px;
+    height: 2px;
+}
+
+ /* Moves span: To the center horizontally but , This puts left edge at center, not full center */
+ 
+    /* Fixes centering : Moves it back by half its width */
+ 
+    /* Distance between left & right balls : Width of DNA */
+ 
+/*  ● ------------------------------- ●
+   (left ball)   span                (right ball) */
+ 
+ 
+/* SUMMARY
+1. .strand = vertical container
+2. span = horizontal lines
+3. stacked together = ladder
+4. animation = DNA helix */
+ 
+/* [::before]   span   [::after]
+So each <span> actually behaves like it has 3 parts
+Eg:  like a sandwich:
+Top bread   → ::before
+Filling     → span
+Bottom bread → ::after */
+/* Common properties of both the balls */
+
+.dna .strand span::before,
+.dna .strand span::after{
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(13, 110, 253, .5);
+}
+
+.dna .strand span::before {
+    left: 50%;
+    transform: translateX(-140px);
+    background: linear-gradient(180deg, #0d6efd, #7cb2ff);
+    animation: orbitL 6.5s linear infinite;
+    animation-delay: calc(var(--i)*-0.1s);/* Help */
+}
+
+.dna .strand span::after {
+    left: 50%;
+    transform: translateX(140px);
+    background: linear-gradient(180deg, #20c997, #a7f3d0);
+    animation: orbitR 6.5s linear infinite;
+    animation-delay: calc(var(--i)*-0.1s);/* Help */
+}
+
+@keyframes orbitL {
+    0%,
+    100% {
+        transform: translateX(-140px) scale(.6);
+        opacity: .55;
+    }
+
+    50% {
+        transform: translateX(140px) scale(1);/* Help */
+        opacity: 1;
+    }
+}
+
+@keyframes orbitR {
+    0%,
+    100% {
+        transform: translateX(140px) scale(.6);
+        opacity: .55;
+    }
+
+    50% {
+        transform: translateX(-140px) scale(1);
+        opacity: 1;
+    }
+}
+.dna .strand span {
+    top: calc(var(--i) * 3.8%)/* Help */
+}
+
+.navbar{
+    box-shadow: var(--shadow);
+}
+
+.navbar .brand-mark {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem
+}
+
+.navbar .brand-mark i {
+    font-size: 1.5rem;
+}
+.to-top{
+    position:fixed;
+    right: 1rem;
+    bottom: 1rem;
+    z-index: 1030;
+}
+section{
+    scroll-margin-top: 6rem;
+}
+
+.section-title {
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after{
+    content: "";
+    position: absolute;
+    left:0;
+    bottom: -.4rem;
+    width: 72px;
+    height: 4px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #28a745, #ffc107)
+}
+
+.feature-card{
+    border: 0;
+    border-radius: 1rem;
+    background: linear-gradient(180deg, #fff, #f8fafc);
+    box-shadow: var(--shadow);
+}
+
+
+#heroCarousel{
+    border-radius: var(--radius-xxl);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.hero-overlay{
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, .25);
+}
+
+.hero-caption {
+    backdrop-filter: saturate(140%) blur(6px);
+    background: rgba(255, 255, 255, .88);
+    border-radius: 1rem;
+    padding: 1.1rem 1.25rem;
+    color: #212529;
+    box-shadow: var(--shadow);
+}
+
+.hero-img{
+    height: 60vh;
+    object-fit: cover;
+}
+
+.news-card{
+    border: none;
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    transition: transform .25s ease, box-shadow .25s ease;
+    background: linear-gradient(180deg, #fff, #f8f9fa)
+}
+
+.news-card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 14 30 rgba(0,0,0, .12);
+}
+
+.news-card .card-img-top{
+    height: 240px;
+    object-fit: cover;
+}
+
+.winner-card{
+    border: 0;
+    border-radius: 1rem;
+    box-shadow: var(--shadow);
+    transition: transform .2s ease;
+}
+
+ .stem-tile {
+     border: 0;
+     border-radius: 1rem;
+     box-shadow: var(--shadow);
+     transition: transform .2s ease
+ }
+
+.stem-title:hover{
+    transform: translateY(-5px);
+}
+
+footer{
+    background: linear-gradient(90deg, var(--primary), #00c6ff);
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .news-card .card-img-top {
+        height: 200px;
+    }
+}
